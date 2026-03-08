@@ -1,0 +1,9 @@
+- name: Provision Podman + PostgreSQL + Ollama + LiteLLM
+  hosts: all
+  become: true
+
+  roles:
+    - role: podman
+    - role: postgresql
+    - role: ollama
+    - role: litellm

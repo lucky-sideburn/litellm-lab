@@ -1,0 +1,19 @@
+- name: Ensure Ollama data dir exists
+  ansible.builtin.file:
+    path: "{{ ollama_data_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Run Ollama container
+  containers.podman.podman_container:
+    name: "{{ ollama_container_name }}"
+    image: "{{ ollama_image }}"
+    state: started
+    recreate: false
+    restart_policy: "{{ ollama_restart_policy }}"
+    network:
+      - "{{ podman_network }}"
+    volume:
+      - "{{ ollama_data_dir }}:/root/.ollama:Z"
+    ports:
+      - "{{ ollama_port }}:11434"

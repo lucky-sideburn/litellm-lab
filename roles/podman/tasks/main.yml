@@ -1,0 +1,9 @@
+- name: Install Podman
+  ansible.builtin.package:
+    name: podman
+    state: present
+
+- name: Ensure Podman network exists
+  containers.podman.podman_network:
+    name: "{{ podman_network }}"
+    state: present

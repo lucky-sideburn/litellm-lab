@@ -1,0 +1,35 @@
+- name: Install shell transport script for LiteLLM chat completions
+  hosts: all
+  become: true
+
+  vars:
+    transport_script_path: /usr/local/bin/litellm-chat.sh
+    litellm_transport_url: http://localhost:4000/chat/completions
+    litellm_transport_model: llama3.2:1b
+
+  tasks:
+    - name: Install transport shell script
+      ansible.builtin.copy:
+        dest: "{{ transport_script_path }}"
+        mode: "0755"
+        owner: root
+        group: root
+        content: |
+          #!/usr/bin/env bash
+          set -euo pipefail
+
+          URL="${1:-{{ litellm_transport_url }}}"
+          MODEL="${2:-{{ litellm_transport_model }}}"
+
+          curl --request POST \
+            --url "$URL" \
+            --header 'Content-Type: application/json' \
+            --data "{\"model\": \"$MODEL\", \"messages\": [{\"role\": \"user\", \"content\": \"Print hello world with bash\"}]}"
+
+    - name: Print transport usage
+      ansible.builtin.debug:
+        msg:
+          - "Installed {{ transport_script_path }}"
+          - "Run: {{ transport_script_path }}"
+          - "Custom URL: {{ transport_script_path }} http://localhost:4000/chat/completions"
+          - "Custom model: {{ transport_script_path }} http://localhost:4000/chat/completions llama3.2:1b"

@@ -1,0 +1,35 @@
+- name: Ensure LiteLLM config dir exists
+  ansible.builtin.file:
+    path: "{{ litellm_config_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Copy LiteLLM config
+  ansible.builtin.copy:
+    src: config.yaml
+    dest: "{{ litellm_config_dir }}/config.yaml"
+    mode: "0644"
+
+- name: Run LiteLLM container
+  containers.podman.podman_container:
+    name: "{{ litellm_container_name }}"
+    image: "{{ litellm_image }}"
+    state: started
+    recreate: false
+    restart_policy: "{{ litellm_restart_policy }}"
+    network:
+      - "{{ podman_network }}"
+    env:
+      LITELLM_MASTER_KEY: "{{ litellm_master_key }}"
+      DATABASE_URL: "postgresql://{{ postgres_user }}:{{ postgres_password }}@postgres:5432/{{ postgres_db }}"
+    command:
+      - "--config"
+      - "/app/config.yaml"
+      - "--port"
+      - "4000"
+      - "--host"
+      - "0.0.0.0"
+    volume:
+      - "{{ litellm_config_dir }}/config.yaml:/app/config.yaml:Z"
+    ports:
+      - "{{ litellm_port }}:4000"

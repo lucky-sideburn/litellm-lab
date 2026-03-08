@@ -1,0 +1,23 @@
+- name: Ensure PostgreSQL data dir exists
+  ansible.builtin.file:
+    path: "{{ postgres_data_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Run PostgreSQL container
+  containers.podman.podman_container:
+    name: "{{ postgres_container_name }}"
+    image: "{{ postgres_image }}"
+    state: started
+    recreate: false
+    restart_policy: "{{ postgres_restart_policy }}"
+    network:
+      - "{{ podman_network }}"
+    env:
+      POSTGRES_DB: "{{ postgres_db }}"
+      POSTGRES_USER: "{{ postgres_user }}"
+      POSTGRES_PASSWORD: "{{ postgres_password }}"
+    volume:
+      - "{{ postgres_data_dir }}:/var/lib/postgresql/data:Z"
+    ports:
+      - "{{ postgres_port }}:5432"
