@@ -8,7 +8,7 @@
     litellm_transport_model: llama3.2:1b
 
   tasks:
-    - name: Install transport shell script
+    - name: Install Test Chart Script
       ansible.builtin.copy:
         dest: "{{ transport_script_path }}"
         mode: "0755"
@@ -19,13 +19,15 @@
           set -euo pipefail
 
           URL="${1:-{{ litellm_transport_url }}}"
-          MODEL="${2:-{{ litellm_transport_model }}}"
+          MODEL="ollama/llama3.2:1b"
 
           curl --request POST \
             --url "$URL" \
+            --header 'Accept: application/json' \
+            --header 'Authorization: Bearer {{ litellm_master_key }}' \
             --header 'Content-Type: application/json' \
             --data "{\"model\": \"$MODEL\", \"messages\": [{\"role\": \"user\", \"content\": \"Print hello world with bash\"}]}"
-
+    
     - name: Print transport usage
       ansible.builtin.debug:
         msg:
