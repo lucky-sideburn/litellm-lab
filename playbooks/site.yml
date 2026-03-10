@@ -7,3 +7,4 @@
     - role: postgresql
     - role: ollama
     - role: litellm
+    - role: nodered

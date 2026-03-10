@@ -1,0 +1,12 @@
+---
+- name: Run Node-RED container
+  containers.podman.podman_container:
+    name: mynodered
+    image: docker.io/nodered/node-red:latest
+    state: started
+    ports:
+      - "1880:1880"
+    tty: true
+    interactive: true
+    detach: true
+    restart_policy: unless-stopped
