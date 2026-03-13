@@ -22,6 +22,7 @@
     env:
       LITELLM_MASTER_KEY: "{{ litellm_master_key }}"
       DATABASE_URL: "postgresql://{{ postgres_user }}:{{ postgres_password }}@postgres:5432/{{ postgres_db }}"
+      STORE_MODEL_IN_DB: "True"
     command:
       - "--config"
       - "/app/config.yaml"

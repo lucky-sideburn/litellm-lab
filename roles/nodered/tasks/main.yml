@@ -1,11 +1,21 @@
 ---
+- name: Ensure Node-RED data directory exists
+  ansible.builtin.file:
+    path: "{{ node_red_data_dir }}"
+    state: directory
+    mode: '0777'
+
 - name: Run Node-RED container
   containers.podman.podman_container:
     name: mynodered
     image: docker.io/nodered/node-red:latest
     state: started
+    network:
+      - "{{ podman_network }}"
     ports:
       - "1880:1880"
+    volumes:
+      - "{{ node_red_data_dir }}:/data:Z"
     tty: true
     interactive: true
     detach: true

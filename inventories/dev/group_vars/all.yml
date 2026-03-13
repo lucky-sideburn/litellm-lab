@@ -1,6 +1,6 @@
 postgres_container_name: postgres
 postgres_image: docker.io/library/postgres:16
-postgres_data_dir: /opt/containers/postgres/data
+postgres_data_dir: /Users/eugenio/containers/postgres/data
 postgres_port: 5432
 postgres_db: litellm
 postgres_user: litellm
@@ -8,13 +8,15 @@ postgres_password: change_me
 
 ollama_container_name: ollama
 ollama_image: docker.io/ollama/ollama:latest
-ollama_data_dir: /opt/containers/ollama/data
+ollama_data_dir: /Users/eugenio/containers/ollama/data
 ollama_port: 11434
 
 litellm_container_name: litellm
 litellm_image: ghcr.io/berriai/litellm:main-latest
 litellm_port: 4000
-litellm_config_dir: /opt/containers/litellm
+litellm_config_dir: /Users/eugenio/containers/litellm
 litellm_master_key: sk-1234
+
+node_red_data_dir: /Users/eugenio/containers/nodered/data
 
 podman_network: llm_net

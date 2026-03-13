@@ -13,6 +13,10 @@
     restart_policy: "{{ ollama_restart_policy }}"
     network:
       - "{{ podman_network }}"
+    env:
+      # OLLAMA_KEEP_ALIVE: -1
+      # OLLAMA_KV_CACHE_TYPE: "q4_0"
+      # OLLAMA_FLASH_ATTENTION: 1
     volume:
       - "{{ ollama_data_dir }}:/root/.ollama:Z"
     ports:
